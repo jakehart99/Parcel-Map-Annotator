@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Parcel Map Annotator">
+  <rect width="64" height="64" rx="14" fill="#171c25"/>
+  <path d="M18 18l15-6 13 5v29l-15 6-13-5z" fill="#f7f2ea" opacity=".95"/>
+  <path d="M18 18l13 5 15-6M31 23v29" fill="none" stroke="#9aa3af" stroke-width="3" stroke-linejoin="round"/>
+  <circle cx="32" cy="32" r="11" fill="#dc1e1e" stroke="#fff" stroke-width="4"/>
+  <circle cx="32" cy="32" r="4" fill="#fff"/>
+</svg>

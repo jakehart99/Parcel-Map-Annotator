@@ -30,15 +30,15 @@
         </label>
         <label class="field">
           <span>Surrounding extent (m)</span>
-          <input type="number" name="extent" value="{{ values.extent }}">
+          <input type="number" min="100" max="5000" name="extent" value="{{ values.extent }}">
         </label>
         <label class="field">
           <span>Business search radius (m)</span>
-          <input type="number" name="search_radius" value="{{ values.search_radius }}">
+          <input type="number" min="100" max="5000" name="search_radius" value="{{ values.search_radius }}">
         </label>
         <label class="field">
           <span>Image size (px)</span>
-          <input type="number" name="size" value="{{ values.size }}">
+          <input type="number" min="640" max="1280" name="size" value="{{ values.size }}">
         </label>
       </div>
 
@@ -48,12 +48,11 @@
       {% endif %}
     </form>
 
-    {% if image %}
+    {% if image_url %}
     <section class="card result">
       <h2>Result</h2>
-      <img src="data:image/png;base64,{{ image }}" alt="Annotated parcel map for {{ address }}">
-      <a class="download" href="data:image/png;base64,{{ image }}"
-         download="parcel-map.png">⬇ Download PNG</a>
+      <img src="{{ image_url }}" alt="Annotated parcel map for {{ address }}">
+      <a class="download" href="{{ download_url }}" download="parcel-map.png">⬇ Download PNG</a>
     </section>
     {% endif %}
   </main>

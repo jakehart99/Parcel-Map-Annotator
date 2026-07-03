@@ -96,6 +96,17 @@ or download the PNG. This is the friendliest option for non-technical staff.
 > the project root. It starts the server and opens the browser automatically.
 > (Uses port 5050 — not 5000, which macOS AirPlay Receiver occupies.)
 
+### Vercel deployment
+
+This repo includes Vercel configuration for the Flask web UI:
+
+- `pyproject.toml` points Vercel at `parcelmap.app:app`.
+- `vercel.json` gives the Python function the Hobby-plan maximum duration.
+- `.vercelignore` keeps local caches and generated images out of deployments.
+
+The web UI streams generated maps from `/map.png` instead of embedding base64 in
+the HTML so responses stay within Vercel Function payload limits.
+
 ---
 
 ## How the geometry works
