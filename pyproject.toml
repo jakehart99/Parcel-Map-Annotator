@@ -1,2 +1,2 @@
 [tool.vercel]
-entrypoint = "parcelmap.app:app"
+entrypoint = "api.index:app"

@@ -100,7 +100,8 @@ or download the PNG. This is the friendliest option for non-technical staff.
 
 This repo includes Vercel configuration for the Flask web UI:
 
-- `pyproject.toml` points Vercel at `parcelmap.app:app`.
+- `api/index.py` exposes the Flask app at a Vercel-compatible entrypoint.
+- `pyproject.toml` points Vercel at `api.index:app`.
 - `vercel.json` gives the Python function the Hobby-plan maximum duration.
 - `.vercelignore` keeps local caches and generated images out of deployments.
 
