@@ -64,6 +64,41 @@ button {
   cursor: pointer;
 }
 button:hover { filter: brightness(1.1); }
+button:disabled {
+  cursor: wait;
+  opacity: .72;
+}
+button:disabled:hover { filter: none; }
+
+.generate-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .55rem;
+  min-width: 10.75rem;
+}
+
+.button-spinner,
+.spinner {
+  border: 2px solid rgba(255, 255, 255, .28);
+  border-radius: 999px;
+  border-top-color: #fff;
+  flex: 0 0 auto;
+  animation: spin .8s linear infinite;
+}
+
+.button-spinner {
+  display: none;
+  width: 1rem;
+  height: 1rem;
+}
+
+.is-submitting .button-spinner { display: inline-block; }
+
+.loading-message {
+  color: var(--muted);
+  margin: .75rem 0 0;
+}
 
 .error {
   background: #3a1f1f;
@@ -74,10 +109,47 @@ button:hover { filter: brightness(1.1); }
 }
 
 .result h2 { margin-top: 0; }
-.result img {
-  width: 100%;
-  border-radius: 8px;
+.map-frame {
+  align-items: center;
+  background: var(--card-2);
   border: 1px solid var(--border);
+  border-radius: 8px;
+  display: grid;
+  justify-items: center;
+  min-height: 320px;
+  overflow: hidden;
+  position: relative;
+}
+.result img {
+  display: block;
+  opacity: 0;
+  transition: opacity .2s ease;
+  width: 100%;
+}
+.result.is-loaded img { opacity: 1; }
+.map-loading {
+  align-items: center;
+  background: var(--card-2);
+  color: var(--muted);
+  display: flex;
+  gap: .75rem;
+  inset: 0;
+  justify-content: center;
+  padding: 1rem;
+  position: absolute;
+  text-align: center;
+  z-index: 1;
+}
+.map-loading .spinner {
+  border-width: 3px;
+  border-top-color: var(--accent);
+  height: 1.55rem;
+  width: 1.55rem;
+}
+.result.is-loaded .map-loading { display: none; }
+.result.has-load-error .map-loading {
+  background: #3a1f1f;
+  color: #f3c4c4;
 }
 .download {
   display: inline-block;
@@ -88,6 +160,19 @@ button:hover { filter: brightness(1.1); }
   padding: .5rem .9rem;
   border-radius: 8px;
   text-decoration: none;
+}
+.download.is-disabled {
+  cursor: wait;
+  opacity: .55;
+  pointer-events: none;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@media (max-width: 560px) {
+  .map-frame { min-height: 240px; }
 }
 
 footer {

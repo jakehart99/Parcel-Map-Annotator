@@ -14,7 +14,7 @@
   </header>
 
   <main>
-    <form method="post" action="/generate" class="card">
+    <form method="post" action="/generate" class="card" data-generate-form aria-describedby="generate-status">
       <label class="field">
         <span>Property address</span>
         <input type="text" name="address" required autofocus
@@ -42,17 +42,29 @@
         </label>
       </div>
 
-      <button type="submit">Generate map</button>
+      <button type="submit" class="generate-button" data-generate-button>
+        <span class="button-label">Generate map</span>
+        <span class="button-spinner" aria-hidden="true"></span>
+      </button>
+      <p class="loading-message" id="generate-status" data-generate-status hidden aria-live="polite">
+        Generating map... this can take a minute.
+      </p>
       {% if error %}
         <p class="error">⚠️ {{ error }}</p>
       {% endif %}
     </form>
 
     {% if image_url %}
-    <section class="card result">
+    <section class="card result" aria-busy="true">
       <h2>Result</h2>
-      <img src="{{ image_url }}" alt="Annotated parcel map for {{ address }}">
-      <a class="download" href="{{ download_url }}" download="parcel-map.png">⬇ Download PNG</a>
+      <div class="map-frame">
+        <div class="map-loading" data-map-loading role="status" aria-live="polite">
+          <span class="spinner" aria-hidden="true"></span>
+          <span>Generating map... this can take a minute.</span>
+        </div>
+        <img src="{{ image_url }}" alt="Annotated parcel map for {{ address }}" data-result-image>
+      </div>
+      <a class="download is-disabled" href="{{ download_url }}" download="parcel-map.png" aria-disabled="true" data-download-link>⬇ Download PNG</a>
     </section>
     {% endif %}
   </main>
@@ -60,5 +72,72 @@
   <footer>
     Data © OpenStreetMap contributors · Imagery: Esri, Maxar, Earthstar Geographics.
   </footer>
+
+  <script>
+    (() => {
+      const form = document.querySelector("[data-generate-form]");
+      if (form) {
+        const button = form.querySelector("[data-generate-button]");
+        const status = form.querySelector("[data-generate-status]");
+
+        form.addEventListener("submit", (event) => {
+          if (form.dataset.submitting === "true") {
+            event.preventDefault();
+            return;
+          }
+
+          form.dataset.submitting = "true";
+          form.classList.add("is-submitting");
+
+          if (button) {
+            button.disabled = true;
+          }
+
+          if (status) {
+            status.hidden = false;
+          }
+        });
+      }
+
+      const resultImage = document.querySelector("[data-result-image]");
+      if (!resultImage) {
+        return;
+      }
+
+      const result = resultImage.closest(".result");
+      const loading = result ? result.querySelector("[data-map-loading]") : null;
+      const downloadLink = document.querySelector("[data-download-link]");
+
+      const finishLoading = () => {
+        if (result) {
+          result.classList.add("is-loaded");
+          result.setAttribute("aria-busy", "false");
+        }
+
+        if (downloadLink) {
+          downloadLink.classList.remove("is-disabled");
+          downloadLink.removeAttribute("aria-disabled");
+        }
+      };
+
+      const showLoadError = () => {
+        if (result) {
+          result.classList.add("has-load-error");
+          result.setAttribute("aria-busy", "false");
+        }
+
+        if (loading) {
+          loading.textContent = "Map generation failed. Adjust the address and try again.";
+        }
+      };
+
+      if (resultImage.complete && resultImage.naturalWidth > 0) {
+        finishLoading();
+      } else {
+        resultImage.addEventListener("load", finishLoading, { once: true });
+        resultImage.addEventListener("error", showLoadError, { once: true });
+      }
+    })();
+  </script>
 </body>
 </html>
